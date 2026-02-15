@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🧠 Simple Knowledge Graph RAG with Neo4j
 
 > Load a FAQ file → Extract entities & relations → Store in Neo4j → Ask questions with AI
@@ -279,3 +280,6 @@ With RAG:     Question → Search Database → LLM + Context → Accurate Answer
 ---
 
 <p align="center">Built with ❤️ by <strong>The AI Dude Tamil</strong> 🎬</p>
+=======
+"# SocialEagleGenAI" 
+>>>>>>> 95bb3fb187ef415aaee78d1223b324b6c53fff7c

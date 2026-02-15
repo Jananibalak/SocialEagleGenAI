@@ -49,8 +49,13 @@ def store(entities, relations):
     with db.session() as s:
         s.run("MATCH (n) DETACH DELETE n")  # Clear old data
         for e in entities:
+            print(f"MERGE (n:Entity {{name: {e['name']}}}) SET n.type = {e['type']}")
             s.run("MERGE (n:Entity {name: $name}) SET n.type = $type", name=e["name"], type=e["type"])
         for r in relations:
+            print(f"""
+                MATCH (a:Entity {{name:{r['source']}}}), (b:Entity {{name: {r['target']}}})
+                MERGE (a)-[:RELATES {{type: {r['relation']}}}]->(b)
+            """)
             s.run("""
                 MATCH (a:Entity {name: $src}), (b:Entity {name: $tgt})
                 MERGE (a)-[:RELATES {type: $rel}]->(b)
@@ -76,6 +81,14 @@ def search_graph(question):
     results = []
     with db.session() as s:
         for kw in keywords:
+            print(f"""
+                MATCH (n:Entity) WHERE toLower(n.name) CONTAINS toLower({kw})
+                OPTIONAL MATCH (n)-[r:RELATES]->(m)
+                OPTIONAL MATCH (p)-[r2:RELATES]->(n)
+                RETURN n.name AS entity, n.type AS type,
+                       collect(DISTINCT {{rel: r.type, target: m.name}}) AS out,
+                       collect(DISTINCT {{rel: r2.type, source: p.name}}) AS inc
+            """)
             records = s.run("""
                 MATCH (n:Entity) WHERE toLower(n.name) CONTAINS toLower($kw)
                 OPTIONAL MATCH (n)-[r:RELATES]->(m)
@@ -86,6 +99,7 @@ def search_graph(question):
             """, kw=kw)
             for rec in records:
                 d = rec.data()
+                print(d)
                 info = f"{d['entity']} ({d['type']})"
                 for o in d['out']:
                     if o['target']: info += f"\n  → {d['entity']} --{o['rel']}--> {o['target']}"
@@ -120,6 +134,7 @@ if __name__ == "__main__":
     for i, chunk in enumerate(chunks):
         print(f"  🧠 Extracting chunk {i+1}/{len(chunks)}...")
         data = extract(chunk)
+        print(data)
         for e in data["entities"]:
             if e["name"] not in seen_e:
                 seen_e.add(e["name"])
