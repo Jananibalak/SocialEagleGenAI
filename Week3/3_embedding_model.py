@@ -2,7 +2,7 @@
 from langchain_openai import OpenAIEmbeddings
 
 embeddings = OpenAIEmbeddings(
-    model="openai/text-embedding-3-small" ,api_key="*************" # cheap + good
+    model="openai/text-embedding-3-small" ,api_key="API_KEY" # cheap + good
 )
 
 vector = embeddings.embed_query("LangChain is powerful")
