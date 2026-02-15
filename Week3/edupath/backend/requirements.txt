@@ -1,0 +1,19 @@
+# Backend Dependencies
+flask==3.1.0
+flask-cors==5.0.0
+flask-sqlalchemy==3.1.1
+neo4j==6.1.0
+openai==2.16.0
+python-dotenv==1.2.1
+psycopg2-binary==2.9.10
+pydantic==2.12.5
+python-jose==3.3.0
+passlib==1.7.4
+bcrypt==4.2.1
+
+# For progress tracking - using latest versions with Python 3.13 support
+pandas>=2.2.3
+numpy>=1.26.4
+
+# For scheduling daily check-ins
+apscheduler==3.10.4

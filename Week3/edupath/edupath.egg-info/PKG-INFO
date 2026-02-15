@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: edupath
+Version: 0.1.0
+Requires-Dist: flask>=3.0.0
+Requires-Dist: flask-cors>=4.0.0
+Requires-Dist: flask-sqlalchemy>=3.0.0
+Requires-Dist: neo4j>=5.0.0
+Requires-Dist: openai>=1.0.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: sqlalchemy>=2.0.0
+Requires-Dist: psycopg2-binary>=2.9.0
+Requires-Dist: streamlit>=1.30.0
+Requires-Dist: plotly>=5.0.0
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: requests>=2.31.0
+Dynamic: requires-dist

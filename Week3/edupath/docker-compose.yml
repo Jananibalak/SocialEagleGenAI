@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Neo4j for Knowledge Graph
+  neo4j:
+    image: neo4j:latest
+    container_name: edupath_neo4j
+    ports:
+      - "7474:7474"  # Browser
+      - "7687:7687"  # Bolt
+    environment:
+      - NEO4J_AUTH=neo4j/your_password
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - edupath_network
+
+  # PostgreSQL for User Data
+  postgres:
+    image: postgres:16
+    container_name: edupath_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=edupath_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - edupath_network
+
+volumes:
+  neo4j_data:
+  postgres_data:
+
+networks:
+  edupath_network:
+    driver: bridge
