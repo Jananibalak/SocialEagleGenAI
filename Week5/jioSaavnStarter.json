@@ -1,0 +1,368 @@
+{
+  "name": "jioSaavnStarter",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        256
+      ],
+      "id": "218d20f1-0800-4fd4-ba8b-48f897abce8f",
+      "name": "Telegram Trigger",
+      "webhookId": "3187397b-3c25-4919-b95b-0a0727c0a1e5",
+      "credentials": {
+        "telegramApi": {
+          "id": "6NoB3qgHFKARS4FB",
+          "name": "JIOSAAVN"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://epixylous-unrelinquished-danyell.ngrok-free.dev/play-song",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "song",
+              "value": "={{ $json.song }}"
+            },
+            {
+              "name": "user_name",
+              "value": "={{ $json.user_name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        672,
+        160
+      ],
+      "id": "24410f48-593f-41b4-a75f-ded909fbcf98",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "012ca97a-20e9-42b1-b600-1ed652a74432",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "success",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        160
+      ],
+      "id": "6de6bf5b-a36c-4acc-9126-5ababc6c9d3d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Reply the user requested query - \"{{ $('check play command').item.json.message.text }}\" song with a motivational message. do not say i cant play somgs. since it is done through automation",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1120,
+        -96
+      ],
+      "id": "1a56e52a-17b4-4c83-bb62-53e343aa5f2a",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxTokens": 100
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        128
+      ],
+      "id": "63fd47d1-8979-480d-b1f8-1db04b9d40e1",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "1Ik8WL1h8qrenJvI",
+          "name": "saavn_openrouterkey"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract artist/song from message\nconst message = $('Telegram Trigger').first().json.message.text.toLowerCase().trim();\nlet song=\"\";\nlet extractedText = '';\n\n// Parse different command formats\nif (message.includes('play ')) {\n  extractedText = message.split('play ')[1];\n} else if (message.includes('music ')) {\n  extractedText = message.split('music ')[1];\n}\n\nif (extractedText) {\n  song = extractedText.trim();\n}\nelse\n{\n  song=\"Whistle podu\";\n}\n\n\n\nreturn {\n  json: {\n    song: song,\n    original_message: message,\n    user_name:$('Telegram Trigger').first().json.message.from.first_name,\n    command_type: 'music_play'\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        160
+      ],
+      "id": "c99d752c-4e5e-43d0-b53c-0953f87f99ca",
+      "name": "create json"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.message.from.id }}",
+        "text": "Hi there! 🎵   I'm currently set up to handle music requests that start with \"play\" to Jiosaavn app in mac.  For example: - \"play Whistle podu\" -  Just type \"play [song name]\" and I'll take care of the rest!  Exciting new features are coming soon! 🚀✨",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        448,
+        352
+      ],
+      "id": "9bec3412-ad68-45e2-a0a6-2fadac72e2e8",
+      "name": "no play command",
+      "webhookId": "933cb5da-1531-4c8e-b529-1959791e85ab",
+      "credentials": {
+        "telegramApi": {
+          "id": "6NoB3qgHFKARS4FB",
+          "name": "JIOSAAVN"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('check play command').item.json.message.chat.id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1472,
+        16
+      ],
+      "id": "c523c454-5035-481c-b006-1fcadbd80bd9",
+      "name": "reply with a motivational message",
+      "webhookId": "9b815c26-5038-447b-8420-11662b8b8e6c",
+      "credentials": {
+        "telegramApi": {
+          "id": "6NoB3qgHFKARS4FB",
+          "name": "JIOSAAVN"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Switch').item.json.message.from.id }}",
+        "text": "Sorry, song trigger failed.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1184,
+        304
+      ],
+      "id": "78140475-3ffc-434e-8d74-52205280b647",
+      "name": "song trigger failed",
+      "webhookId": "9b2c5777-6968-41cb-a277-db82d02a5a84",
+      "credentials": {
+        "telegramApi": {
+          "id": "6NoB3qgHFKARS4FB",
+          "name": "JIOSAAVN"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Jio Saavn music starter - Telegram message \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)",
+        "height": 832,
+        "width": 1776,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -80,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "9c4babb6-37ef-4e7b-a577-bdf0a1fa62af",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c4de75a9-9723-4029-a205-c29460e91daa",
+              "leftValue": "={{ $json.message.text.toLowerCase()}}",
+              "rightValue": "play",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        256
+      ],
+      "id": "ba4cef46-6f91-484b-9a57-76ce9576b49a",
+      "name": "check play command"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "check play command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "song trigger failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "reply with a motivational message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create json": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check play command": {
+      "main": [
+        [
+          {
+            "node": "create json",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "no play command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c453a3ff-a88f-43ad-a924-20d454c21f90",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ccb004e82645c290c933262f39df9f06ee790e884cc37ebde4cc3391457670b4"
+  },
+  "id": "PNc6Phy5w8RWHKBE",
+  "tags": []
+}
