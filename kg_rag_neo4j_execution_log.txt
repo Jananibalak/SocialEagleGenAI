@@ -1,0 +1,286 @@
+# ======================================================
+#               SOURCE TEXT FILE (INPUT DATA)
+# ======================================================
+
+# Q&A content used to build the Knowledge Graph
+
+Q: What is AI?
+A: Artificial Intelligence is a branch of computer science created by Alan Turing in 1950...
+
+Q: What is Machine Learning?
+A: Machine Learning is a subset of AI...
+
+Q: What is Deep Learning?
+A: Deep Learning is a subset of Machine Learning...
+
+Q: What is NLP?
+A: Natural Language Processing is a field of AI...
+
+Q: What is a Knowledge Graph?
+A: A Knowledge Graph stores entities and their relationships...
+
+
+🚀 Building Knowledge Graph...
+# ---- INITIALIZATION PHASE ----
+# System starts Knowledge Graph construction pipeline
+
+
+📄 Loaded 5 chunks
+# ---- DOCUMENT PROCESSING ----
+# Text file was split into 5 semantic chunks (Q&A pairs)
+
+
+🧠 Extracting chunk 1/5...
+# ---- LLM ENTITY & RELATION EXTRACTION (Chunk 1) ----
+# Entities and relationships extracted from AI definition
+
+{'entities': [
+    {'name': 'AI', 'type': 'CONCEPT'},
+    {'name': 'Artificial Intelligence', 'type': 'CONCEPT'},
+    {'name': 'computer science', 'type': 'FIELD'},
+    {'name': 'Alan Turing', 'type': 'PERSON'},
+    {'name': '1950', 'type': 'DATE'},
+    {'name': 'OpenAI', 'type': 'ORGANIZATION'},
+    {'name': 'Google DeepMind', 'type': 'ORGANIZATION'},
+    {'name': 'Anthropic', 'type': 'ORGANIZATION'}
+],
+'relations': [
+    {'source': 'Artificial Intelligence', 'relation': 'IS_A', 'target': 'AI'},
+    {'source': 'Artificial Intelligence', 'relation': 'BRANCH_OF', 'target': 'computer science'},
+    {'source': 'Alan Turing', 'relation': 'CREATED', 'target': 'Artificial Intelligence'},
+    {'source': '1950', 'relation': 'YEAR_OF', 'target': 'Artificial Intelligence'},
+    {'source': 'OpenAI', 'relation': 'IS_A', 'target': 'LAB'},
+    {'source': 'Google DeepMind', 'relation': 'IS_A', 'target': 'LAB'},
+    {'source': 'Anthropic', 'relation': 'IS_A', 'target': 'LAB'}
+]}
+
+# ---- Chunk 2 Extraction ----
+🧠 Extracting chunk 2/5...
+# Extracted ML concepts and framework relationships
+
+{'entities': [
+    {'name': 'Machine Learning', 'type': 'CONCEPT'},
+    {'name': 'AI', 'type': 'CONCEPT'},
+    {'name': 'TensorFlow', 'type': 'FRAMEWORK'},
+    {'name': 'Google', 'type': 'ORGANIZATION'},
+    {'name': 'PyTorch', 'type': 'FRAMEWORK'},
+    {'name': 'Meta', 'type': 'ORGANIZATION'}
+],
+'relations': [
+    {'source': 'Machine Learning', 'relation': 'SUBSET_OF', 'target': 'AI'},
+    {'source': 'TensorFlow', 'relation': 'DEVELOPED_BY', 'target': 'Google'},
+    {'source': 'PyTorch', 'relation': 'DEVELOPED_BY', 'target': 'Meta'}
+]}
+
+# ---- Chunk 3 Extraction ----
+🧠 Extracting chunk 3/5...
+# Deep Learning hierarchy + pioneers + applications extracted
+
+{'entities': [{'name': 'Deep Learning', 'type': 'CONCEPT'}, {'name': 'Machine Learning', 'type': 'CONCEPT'}, {'name': 'Geoffrey Hinton', 'type': 'PERSON'}, {'name': 'Yann LeCun', 'type': 'PERSON'}, {'name': 'neural networks', 'type': 'CONCEPT'}, {'name': 'image recognition', 'type': 'CONCEPT'}, {'name': 'language models', 'type': 'CONCEPT'}], 'relations': [{'source': 'Deep Learning', 'relation': 'SUBSET_OF', 'target': 'Machine Learning'}, {'source': 'Deep Learning', 'relation': 'USES', 'target': 'neural networks'}, {'source': 'Deep Learning', 'relation': 'POWERS', 'target': 'image recognition'}, {'source': 'Deep Learning', 'relation': 'POWERS', 'target': 'language models'}, {'source': 'Geoffrey Hinton', 'relation': 'PIONEER_OF', 'target': 'Deep Learning'}, {'source': 'Yann LeCun', 'relation': 'PIONEER_OF', 'target': 'Deep Learning'}]}
+
+# ---- Chunk 4 Extraction ----
+🧠 Extracting chunk 4/5...
+# NLP domain + model relationships extracted
+
+{'entities': [{'name': 'NLP', 'type': 'CONCEPT'}, {'name': 'Natural Language Processing', 'type': 'FIELD'}, {'name': 'AI', 'type': 'CONCEPT'}, {'name': 'BERT', 'type': 'MODEL'}, {'name': 'Google', 'type': 'ORGANIZATION'}, {'name': 'GPT', 'type': 'MODEL'}, {'name': 'OpenAI', 'type': 'ORGANIZATION'}], 'relations': [{'source': 'NLP', 'relation': 'IS_A', 'target': 'Natural Language Processing'}, {'source': 'Natural Language Processing', 'relation': 'FIELD_OF', 'target': 'AI'}, {'source': 'BERT', 'relation': 'DEVELOPED_BY', 'target': 'Google'}, {'source': 'GPT', 'relation': 'DEVELOPED_BY', 'target': 'OpenAI'}]}
+
+# ---- Chunk 5 Extraction ----
+🧠 Extracting chunk 5/5...
+# Knowledge Graph definition + Neo4j relationship extracted
+
+{'entities': [{'name': 'NLP', 'type': 'CONCEPT'}, {'name': 'Natural Language Processing', 'type': 'FIELD'}, {'name': 'AI', 'type': 'CONCEPT'}, {'name': 'BERT', 'type': 'MODEL'}, {'name': 'Google', 'type': 'ORGANIZATION'}, {'name': 'GPT', 'type': 'MODEL'}, {'name': 'OpenAI', 'type': 'ORGANIZATION'}], 'relations': [{'source': 'NLP', 'relation': 'IS_A', 'target': 'Natural Language Processing'}, {'source': 'Natural Language Processing', 'relation': 'FIELD_OF', 'target': 'AI'}, {'source': 'BERT', 'relation': 'DEVELOPED_BY', 'target': 'Google'}, {'source': 'GPT', 'relation': 'DEVELOPED_BY', 'target': 'OpenAI'}]}
+
+# ======================================================
+#               NEO4J INGESTION PHASE
+# ======================================================
+
+# ---- NODE CREATION USING MERGE ----
+# MERGE ensures:
+#   - If node exists → reuse
+#   - If not → create
+
+MERGE (n:Entity {name: AI}) SET n.type = CONCEPT
+MERGE (n:Entity {name: Artificial Intelligence}) SET n.type = CONCEPT
+MERGE (n:Entity {name: computer science}) SET n.type = FIELD
+MERGE (n:Entity {name: Alan Turing}) SET n.type = PERSON
+MERGE (n:Entity {name: 1950}) SET n.type = DATE
+MERGE (n:Entity {name: OpenAI}) SET n.type = ORGANIZATION
+MERGE (n:Entity {name: Google DeepMind}) SET n.type = ORGANIZATION
+MERGE (n:Entity {name: Anthropic}) SET n.type = ORGANIZATION
+MERGE (n:Entity {name: Machine Learning}) SET n.type = CONCEPT
+MERGE (n:Entity {name: TensorFlow}) SET n.type = FRAMEWORK
+MERGE (n:Entity {name: Google}) SET n.type = ORGANIZATION
+MERGE (n:Entity {name: PyTorch}) SET n.type = FRAMEWORK
+MERGE (n:Entity {name: Meta}) SET n.type = ORGANIZATION
+MERGE (n:Entity {name: Deep Learning}) SET n.type = CONCEPT
+MERGE (n:Entity {name: Geoffrey Hinton}) SET n.type = PERSON
+MERGE (n:Entity {name: Yann LeCun}) SET n.type = PERSON
+MERGE (n:Entity {name: neural networks}) SET n.type = CONCEPT
+MERGE (n:Entity {name: image recognition}) SET n.type = CONCEPT
+MERGE (n:Entity {name: language models}) SET n.type = CONCEPT
+MERGE (n:Entity {name: NLP}) SET n.type = CONCEPT
+MERGE (n:Entity {name: Natural Language Processing}) SET n.type = FIELD
+MERGE (n:Entity {name: BERT}) SET n.type = MODEL
+MERGE (n:Entity {name: GPT}) SET n.type = MODEL
+MERGE (n:Entity {name: Knowledge Graph}) SET n.type = CONCEPT
+MERGE (n:Entity {name: 2012}) SET n.type = DATE
+MERGE (n:Entity {name: Neo4j}) SET n.type = SOFTWARE
+MERGE (n:Entity {name: graph database}) SET n.type = CONCEPT
+
+# ---- RELATIONSHIP CREATION ----
+# MATCH locates existing nodes
+# MERGE creates directed relationships with type property
+
+                MATCH (a:Entity {name:Artificial Intelligence}), (b:Entity {name: AI})
+                MERGE (a)-[:RELATES {type: IS_A}]->(b)
+
+
+                MATCH (a:Entity {name:Artificial Intelligence}), (b:Entity {name: computer science})
+                MERGE (a)-[:RELATES {type: BRANCH_OF}]->(b)
+
+
+                MATCH (a:Entity {name:Alan Turing}), (b:Entity {name: Artificial Intelligence})
+                MERGE (a)-[:RELATES {type: CREATED}]->(b)
+
+
+                MATCH (a:Entity {name:1950}), (b:Entity {name: Artificial Intelligence})
+                MERGE (a)-[:RELATES {type: YEAR_OF}]->(b)
+
+
+                MATCH (a:Entity {name:OpenAI}), (b:Entity {name: LAB})
+                MERGE (a)-[:RELATES {type: IS_A}]->(b)
+
+
+                MATCH (a:Entity {name:Google DeepMind}), (b:Entity {name: LAB})
+                MERGE (a)-[:RELATES {type: IS_A}]->(b)
+
+
+                MATCH (a:Entity {name:Anthropic}), (b:Entity {name: LAB})
+                MERGE (a)-[:RELATES {type: IS_A}]->(b)
+
+
+                MATCH (a:Entity {name:Machine Learning}), (b:Entity {name: AI})
+                MERGE (a)-[:RELATES {type: SUBSET_OF}]->(b)
+
+
+                MATCH (a:Entity {name:TensorFlow}), (b:Entity {name: Google})
+                MERGE (a)-[:RELATES {type: DEVELOPED_BY}]->(b)
+
+
+                MATCH (a:Entity {name:PyTorch}), (b:Entity {name: Meta})
+                MERGE (a)-[:RELATES {type: DEVELOPED_BY}]->(b)
+
+
+                MATCH (a:Entity {name:Deep Learning}), (b:Entity {name: Machine Learning})
+                MERGE (a)-[:RELATES {type: SUBSET_OF}]->(b)
+
+
+                MATCH (a:Entity {name:Deep Learning}), (b:Entity {name: neural networks})
+                MERGE (a)-[:RELATES {type: USES}]->(b)
+
+
+                MATCH (a:Entity {name:Deep Learning}), (b:Entity {name: image recognition})
+                MERGE (a)-[:RELATES {type: POWERS}]->(b)
+
+
+                MATCH (a:Entity {name:Deep Learning}), (b:Entity {name: language models})
+                MERGE (a)-[:RELATES {type: POWERS}]->(b)
+
+
+                MATCH (a:Entity {name:Geoffrey Hinton}), (b:Entity {name: Deep Learning})
+                MERGE (a)-[:RELATES {type: PIONEER_OF}]->(b)
+
+
+                MATCH (a:Entity {name:Yann LeCun}), (b:Entity {name: Deep Learning})
+                MERGE (a)-[:RELATES {type: PIONEER_OF}]->(b)
+
+
+                MATCH (a:Entity {name:NLP}), (b:Entity {name: Natural Language Processing})
+                MERGE (a)-[:RELATES {type: IS_A}]->(b)
+
+
+                MATCH (a:Entity {name:Natural Language Processing}), (b:Entity {name: AI})
+                MERGE (a)-[:RELATES {type: FIELD_OF}]->(b)
+
+
+                MATCH (a:Entity {name:BERT}), (b:Entity {name: Google})
+                MERGE (a)-[:RELATES {type: DEVELOPED_BY}]->(b)
+
+
+                MATCH (a:Entity {name:GPT}), (b:Entity {name: OpenAI})
+                MERGE (a)-[:RELATES {type: DEVELOPED_BY}]->(b)
+
+
+                MATCH (a:Entity {name:Google}), (b:Entity {name: Knowledge Graph})
+                MERGE (a)-[:RELATES {type: INTRODUCED}]->(b)
+
+
+                MATCH (a:Entity {name:Neo4j}), (b:Entity {name: graph database})
+                MERGE (a)-[:RELATES {type: IS_POPULAR_FOR}]->(b)
+
+
+# (Remaining MATCH + MERGE statements create total 22 relationships)
+
+
+💾 Stored 27 entities, 22 relations
+# ---- DATABASE STATE ----
+# Neo4j now contains:
+#   27 Nodes (:Entity)
+#   22 Directed Relationships (:RELATES)
+# Knowledge Graph successfully built
+
+✅ Knowledge Graph ready!
+
+
+# ======================================================
+#                 QUERY & RETRIEVAL PHASE
+# ======================================================
+
+💬 Ask anything!
+
+❓ Question: neo4j?
+# ---- ENTITY SEARCH ----
+# Find node where name contains "neo4j"
+
+MATCH (n:Entity)
+WHERE toLower(n.name) CONTAINS toLower(neo4j)
+
+# ---- OUTGOING RELATIONS ----
+OPTIONAL MATCH (n)-[r:RELATES]->(m)
+
+# ---- INCOMING RELATIONS ----
+OPTIONAL MATCH (p)-[r2:RELATES]->(n)
+
+# ---- STRUCTURED RETURN ----
+RETURN n.name AS entity, n.type AS type,
+       collect(DISTINCT {rel: r.type, target: m.name}) AS out,
+       collect(DISTINCT {rel: r2.type, source: p.name}) AS inc
+
+
+# ---- NEO4J RESPONSE ----
+{'entity': 'Neo4j',
+ 'type': 'SOFTWARE',
+ 'out': [{'rel': 'IS_POPULAR_FOR', 'target': 'graph database'}],
+ 'inc': [{'rel': None, 'source': None}]}
+
+# ---- ANSWER GENERATION (Graph-Grounded) ----
+💡 Neo4j is a popular graph database software.
+
+
+❓ Question: jananayagan
+# ---- ENTITY SEARCH ----
+# No matching node found in Neo4j
+
+MATCH (n:Entity)
+WHERE toLower(n.name) CONTAINS toLower(jananayagan)
+
+# ---- EMPTY RESULT ----
+💡 No information is available on "jananayagan."
+
+
+❓ Question: quit
+# ---- TERMINATION ----
+# Application session ended
+
+
+

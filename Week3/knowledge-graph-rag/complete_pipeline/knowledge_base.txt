@@ -1,0 +1,13 @@
+Amazon was founded by Jeff Bezos in 1994 in Seattle, Washington. 
+The company started as an online bookstore and later expanded into a wide variety of products.
+Jeff Bezos served as CEO until 2021, when Andy Jassy took over as CEO.
+Andy Jassy previously led Amazon Web Services (AWS), which is Amazon's cloud computing division.
+
+Microsoft was founded by Bill Gates and Paul Allen in 1975 in Albuquerque, New Mexico.
+The company is headquartered in Redmond, Washington.
+Satya Nadella became CEO of Microsoft in 2014.
+Microsoft Azure is the company's cloud computing platform, competing with AWS.
+
+Tesla was founded in 2003 by Martin Eberhard and Marc Tarpenning.
+Elon Musk joined as chairman in 2004 and became CEO in 2008.
+Tesla is headquartered in Austin, Texas and manufactures electric vehicles.

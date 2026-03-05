@@ -1,0 +1,24 @@
+# Core Framework
+streamlit
+langchain
+langchain-community
+langchain-openai
+
+# Vector Database
+faiss-cpu
+
+# Document Processing
+pypdf
+beautifulsoup4
+
+# Graph Database
+neo4j
+
+# LLM
+openai
+
+# Utilities
+python-dotenv
+requests
+tiktoken
+langchainhub

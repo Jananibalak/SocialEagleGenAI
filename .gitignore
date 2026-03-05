@@ -1,0 +1,20 @@
+virtual/
+.env
+# Python
+__pycache__/
+*.pyc
+venv/
+.virtual/
+.env
+venv11/
+vir3/
+
+# Large files
+*.mp4
+*.zip
+*.csv
+*.pdf
+
+# IDE
+.vscode/
+.idea/

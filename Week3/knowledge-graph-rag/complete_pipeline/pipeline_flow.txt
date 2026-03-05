@@ -1,0 +1,57 @@
+## Understanding the Pipeline Flow
+
+Let me break down what happens when you run this pipeline:
+
+### Visual Flow Diagram
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                     PIPELINE EXECUTION FLOW                          │
+└─────────────────────────────────────────────────────────────────────┘
+
+START
+  │
+  ├─► Initialize Pipeline
+  │   ├─ Verify config
+  │   ├─ Connect to OpenRouter
+  │   └─ Connect to Neo4j
+  │
+  ├─► Load Document (knowledge_base.txt)
+  │   ├─ Read file
+  │   ├─ Check encoding
+  │   └─ Return text: "Amazon was founded by Jeff Bezos..."
+  │
+  ├─► Chunk Text
+  │   ├─ Split by paragraphs (double newline)
+  │   └─ Return chunks: [chunk1, chunk2, chunk3, ...]
+  │
+  ├─► For Each Chunk:
+  │   │
+  │   ├─► Chunk 1: "Amazon was founded by Jeff Bezos in 1994..."
+  │   │   │
+  │   │   ├─► Extract Knowledge (LLM)
+  │   │   │   ├─ Build prompt
+  │   │   │   ├─ Call GPT-4o-mini
+  │   │   │   └─ Parse JSON response
+  │   │   │
+  │   │   └─► Build Graph
+  │   │       ├─ Create entities: Jeff Bezos, Amazon, Seattle
+  │   │       └─ Create relationships: FOUNDED, LOCATED_IN
+  │   │
+  │   ├─► Chunk 2: "Microsoft was founded by Bill Gates..."
+  │   │   ├─► Extract Knowledge
+  │   │   └─► Build Graph
+  │   │
+  │   └─► Chunk 3: "Tesla was founded in 2003..."
+  │       ├─► Extract Knowledge
+  │       └─► Build Graph
+  │
+  ├─► Report Statistics
+  │   ├─ Documents processed: 1
+  │   ├─ Chunks processed: 3
+  │   ├─ Entities created: 15
+  │   └─ Relationships created: 12
+  │
+  └─► Close Connections
+      └─ Close Neo4j driver
+
+END

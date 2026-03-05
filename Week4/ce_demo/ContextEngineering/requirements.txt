@@ -1,0 +1,6 @@
+pyautogen
+openai
+tiktoken
+colorama
+termcolor
+python-dotenv>

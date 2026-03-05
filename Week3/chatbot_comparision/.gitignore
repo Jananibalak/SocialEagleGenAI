@@ -1,0 +1,4 @@
+ccvenv/
+rag_env/
+.env
+*.mp4
