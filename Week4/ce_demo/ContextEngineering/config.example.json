@@ -1,0 +1,13 @@
+{
+  "api_key": "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",
+  "model": "gpt-3.5-turbo",
+  "max_tokens": 4096,
+  "temperature": 0.7,
+  "context_window": {
+    "gpt-3.5-turbo": 4096,
+    "gpt-3.5-turbo-16k": 16384,
+    "gpt-4": 8192,
+    "gpt-4-32k": 32768,
+    "gpt-4-turbo": 128000
+  }
+}
